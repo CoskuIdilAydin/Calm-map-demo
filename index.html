@@ -1,75 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calm Places Map</title>
+<script>
+  // Your fixed starting point
+  const defaultLocation = [41.024893, 28.958593];
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  // 1. Create the map (start at your default location)
+  const map = L.map("map").setView(defaultLocation, 17);
 
-  <style>
-    body { margin: 0; }
-    #map { width: 100vw; height: 100vh; }
-  </style>
-</head>
+  // 2. Try to get user location
+  map.locate({ setView: false, maxZoom: 17 });
 
-<body>
+  // 3. If user allows location → show blue dot at their position
+  map.on("locationfound", (e) => {
+    const userLocation = e.latlng;
 
-  <div id="map"></div>
+    map.setView(userLocation, 17);
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    L.circleMarker(userLocation, {
+      radius: 10,
+      color: "#136AEC",
+      fillColor: "#2A93EE",
+      fillOpacity: 1
+    })
+    .addTo(map)
+    .bindPopup("📍 You are here")
+    .openPopup();
+  });
 
-  <script>
-    // ------------------------------------------------------------
-    // 1. Create the map & starting view
-    // ------------------------------------------------------------
-    const map = L.map("map").setView([41.024893, 28.958593], 17);
+  // 4. If user DENIES location → use your starting point instead
+  map.on("locationerror", () => {
+    console.log("User denied location. Using default point.");
 
-    // ------------------------------------------------------------
-    // 2. Ask for user location → blue dot
-    // ------------------------------------------------------------
-    map.locate({ setView: true, maxZoom: 17 });
+    L.circleMarker(defaultLocation, {
+      radius: 10,
+      color: "#136AEC",
+      fillColor: "#2A93EE",
+      fillOpacity: 1
+    })
+    .addTo(map)
+    .bindPopup("📍 Default starting point")
+    .openPopup();
+  });
 
-    map.on("locationfound", (e) => {
-      L.circleMarker(e.latlng, {
-        radius: 8,
-        color: "#136AEC",
-        fillColor: "#2A93EE",
-        fillOpacity: 0.9
-      }).addTo(map).bindPopup("You are here");
-    });
-
-    map.on("locationerror", () => {
-      console.log("Location access denied");
-    });
-
-    // ------------------------------------------------------------
-    // 3. Add basemap
-    // ------------------------------------------------------------
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(map);
-
-    // ------------------------------------------------------------
-    // 4. Load calm places markers
-    // ------------------------------------------------------------
-    fetch("points.json")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(place => {
-          L.marker([place.lat, place.lng])
-            .addTo(map)
-            .bindPopup(`<b>${place.name}</b>`);
-        });
-      })
-      .catch(err => console.error("points.json not found or invalid", err));
-  </script>
-
-</body>
-</html>
+  // 5. Base map
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+</script>

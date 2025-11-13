@@ -1,38 +1,75 @@
-<script>
-  // 1. Initialize the map
-  const map = L.map("map").setView([41.024893, 28.958593], 17);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calm Places Map</title>
 
-  // 🔵 2. Ask for user location + blue dot
-  map.locate({ setView: true, maxZoom: 17 });
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
 
-  map.on("locationfound", (e) => {
-    L.circleMarker(e.latlng, {
-      radius: 8,
-      color: "#136AEC",
-      fillColor: "#2A93EE",
-      fillOpacity: 0.9
-    }).addTo(map).bindPopup("You are here");
-  });
+  <style>
+    body { margin: 0; }
+    #map { width: 100vw; height: 100vh; }
+  </style>
+</head>
 
-  map.on("locationerror", () => {
-    console.log("Location access denied.");
-  });
+<body>
 
-  // 3. Add OSM tiles
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap contributors"
-  }).addTo(map);
+  <div id="map"></div>
 
-  // 4. Load calm places
-  fetch("points.json")
-    .then(response => response.json())
-    .then(data => {
-      data.forEach(place => {
-        L.marker([place.lat, place.lng])
-          .addTo(map)
-          .bindPopup(`<b>${place.name}</b>`);
-      });
-    })
-    .catch(err => console.error("points.json error:", err));
-</script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    // ------------------------------------------------------------
+    // 1. Create the map & starting view
+    // ------------------------------------------------------------
+    const map = L.map("map").setView([41.024893, 28.958593], 17);
+
+    // ------------------------------------------------------------
+    // 2. Ask for user location → blue dot
+    // ------------------------------------------------------------
+    map.locate({ setView: true, maxZoom: 17 });
+
+    map.on("locationfound", (e) => {
+      L.circleMarker(e.latlng, {
+        radius: 8,
+        color: "#136AEC",
+        fillColor: "#2A93EE",
+        fillOpacity: 0.9
+      }).addTo(map).bindPopup("You are here");
+    });
+
+    map.on("locationerror", () => {
+      console.log("Location access denied");
+    });
+
+    // ------------------------------------------------------------
+    // 3. Add basemap
+    // ------------------------------------------------------------
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    // ------------------------------------------------------------
+    // 4. Load calm places markers
+    // ------------------------------------------------------------
+    fetch("points.json")
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(place => {
+          L.marker([place.lat, place.lng])
+            .addTo(map)
+            .bindPopup(`<b>${place.name}</b>`);
+        });
+      })
+      .catch(err => console.error("points.json not found or invalid", err));
+  </script>
+
+</body>
+</html>

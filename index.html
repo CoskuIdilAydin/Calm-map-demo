@@ -1,63 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calm Places Map</title>
+<script>
+  // 1. Initialize the map
+  const map = L.map("map").setView([41.024893, 28.958593], 17);
 
-  <!-- Leaflet CSS (map styling) -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  // 🔵 2. Ask for user location + blue dot
+  map.locate({ setView: true, maxZoom: 17 });
 
-  <style>
-    /* Make the map take the entire screen */
-    body { margin: 0; }
-    #map { width: 100vw; height: 100vh; }
-  </style>
-</head>
+  map.on("locationfound", (e) => {
+    L.circleMarker(e.latlng, {
+      radius: 8,
+      color: "#136AEC",
+      fillColor: "#2A93EE",
+      fillOpacity: 0.9
+    }).addTo(map).bindPopup("You are here");
+  });
 
-<body>
+  map.on("locationerror", () => {
+    console.log("Location access denied.");
+  });
 
-  <!-- Map container -->
-  <div id="map"></div>
+  // 3. Add OSM tiles
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
 
-  <!-- Leaflet JS (map engine) -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <script>
-    // ------------------------------------------------------------
-    // 1. Initialize the map and set the starting point
-    // ------------------------------------------------------------
-    // Set view to your new starting coordinates
-    const map = L.map("map").setView([41.024893, 28.958593], 35);
-    // Zoom level 15 gives a nice neighborhood-level view
-
-    // ------------------------------------------------------------
-    // 2. Add OpenStreetMap tiles (the base map)
-    // ------------------------------------------------------------
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(map);
-
-    // ------------------------------------------------------------
-    // 3. Load calm places from JSON file (points.json)
-    // ------------------------------------------------------------
-    fetch("points.json")
-      .then(response => response.json())
-      .then(data => {
-        // Each item in points.json must contain { lat, lng, name }
-        data.forEach(place => {
-          // Add a marker for each calm place
-          L.marker([place.lat, place.lng])
-            .addTo(map)
-            .bindPopup(`<b>${place.name}</b>`);
-        });
-      })
-      .catch(err => console.error("points.json not found or invalid", err));
-  </script>
-
-</body>
-</html>
+  // 4. Load calm places
+  fetch("points.json")
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(place => {
+        L.marker([place.lat, place.lng])
+          .addTo(map)
+          .bindPopup(`<b>${place.name}</b>`);
+      });
+    })
+    .catch(err => console.error("points.json error:", err));
+</script>

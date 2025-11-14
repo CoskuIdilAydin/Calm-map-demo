@@ -10,23 +10,23 @@
     "category": "Park"
   },
   {
-    "lat": 41.0240,
-    "lng": 28.9575,
+    "lat": 41.025310616727765, 
+    "lng": 28.957661386297183,
     "title": "Calm Coffee",
     "type": "Cafe",
-    "picture": "images/calm-coffee.jpg",
+    "picture": "images/Posa-Coffee.png",
     "price": "$$",
-    "openHours": "9:00 - 23:00",
+    "openHours": "around 11:00 - 20:00",
     "category": "Cafe"
   },
   {
-    "lat": 41.0260,
-    "lng": 28.9580,
-    "title": "Quiet Corner",
+    "lat": 41.02571470499312,
+    "lng": 28.95900183273744,
+    "title": "Rezan Arceology Museum",
     "type": "Quiet Space",
     "picture": "images/quiet-corner.jpg",
-    "price": "Free",
-    "openHours": "Open 24 hours",
+    "price": "$ or free on weekends",
+    "openHours": "Open 09.00 - 17.00 hours",
     "category": "Quiet"
   }
 ]

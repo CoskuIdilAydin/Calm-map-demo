@@ -3,76 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Calm Places Map</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
-  <style>
-    body { margin: 0; }
-    #map { width: 100vw; height: 100vh; }
-
-    /* --- Modern Search Box (QGIS-style) --- */
-    .search-box {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      z-index: 9999;
-      background: #ffffff;
-      padding: 12px;
-      width: 260px;
-      border-radius: 14px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-family: system-ui, Arial;
-    }
-
-    .search-inner {
-      display: flex;
-      align-items: center;
-      background: #f2f2f2;
-      border-radius: 12px;
-      padding: 6px 10px;
-    }
-
-    .search-inner input {
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 15px;
-      flex: 1;
-    }
-
-    .search-btn {
-      background: #4a4a4a;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    #category {
-      padding: 8px;
-      font-size: 14px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-  </style>
+  <!-- Your custom styles -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-  <!-- --- SEARCH + FILTER UI --- -->
-  <div class="search-box">
-    <div class="search-inner">
-      <input id="search" type="text" placeholder="Search place name..." />
-      <button class="search-btn">🔍</button>
-    </div>
-
+  <!-- SEARCH + FILTER UI -->
+  <div class="controls">
+    <input id="search" type="text" placeholder="Search calm places..." />
     <select id="category">
       <option value="all">All categories</option>
       <option value="Park">Park</option>
@@ -81,30 +26,27 @@
     </select>
   </div>
 
+  <!-- MAP -->
   <div id="map"></div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    const defaultLocation = [41.024893, 28.958593];
+    const defaultLocation = [41.024893, 28.958593]; // Your default start
+    const map = L.map("map", { zoomControl: false }).setView(defaultLocation, 17);
 
-    // Disable zoom buttons
-    const map = L.map("map", { zoomControl: false })
-      .setView(defaultLocation, 17);
-
-    // Add tiles
+    // Add map tiles
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
-    // ---- USER LOCATION BLUE DOT ----
+    // Try to locate user
     map.locate({ setView: false, maxZoom: 17 });
 
     map.on("locationfound", e => {
       map.setView(e.latlng, 17);
-
       L.circleMarker(e.latlng, {
         radius: 10,
         color: "#136AEC",
@@ -113,6 +55,7 @@
       }).addTo(map).bindPopup("You are here");
     });
 
+    // If user denies location → place blue dot at default
     map.on("locationerror", () => {
       L.circleMarker(defaultLocation, {
         radius: 10,
@@ -122,9 +65,10 @@
       }).addTo(map).bindPopup("Default location");
     });
 
-    // ---- Load Markers ----
+    // Store all markers
     let markers = [];
 
+    // Load calm places from points.json
     fetch("points.json")
       .then(resp => resp.json())
       .then(places => {
@@ -137,7 +81,7 @@
         });
       });
 
-    // ---- Search + Filter ----
+    // Listen to search + filter
     document.getElementById("search").addEventListener("input", filterMarkers);
     document.getElementById("category").addEventListener("change", filterMarkers);
 
@@ -147,7 +91,7 @@
 
       markers.forEach(marker => {
         const matchesName = marker.name.toLowerCase().includes(text);
-        const matchesCat = (cat === "all" || marker.category === cat);
+        const matchesCat = cat === "all" || marker.category === cat;
 
         if (matchesName && matchesCat) {
           marker.addTo(map);

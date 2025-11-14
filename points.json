@@ -4,31 +4,32 @@
     "lng": 28.95781,
     "title": "Nalıncı Kasım Small Park",
     "type": "Park",
-    "picture": "images/NalıncıKasımSk-istanbul.png",
+    "picture": "images/nalinci-kasim-park.png",
     "price": "Free",
     "openHours": "Open 24 hours",
-    "category": "Park"
+    "category": "Very Quiet"
   },
   {
-    "lat": 41.025310616727765, 
+    "lat": 41.025310616727765,
     "lng": 28.957661386297183,
     "title": "Calm Coffee",
     "type": "Cafe",
-    "picture": "images/Posa-Coffee.png",
+    "picture": "images/calm-coffee.png",
     "price": "$$",
     "openHours": "around 11:00 - 20:00",
-    "category": "Cafe"
+    "category": "Quiet"
   },
   {
     "lat": 41.02571470499312,
     "lng": 28.95900183273744,
-    "title": "Rezan Arceology Museum",
-    "type": "Quiet Space",
-    "picture": "images/quiet-corner.jpg",
+    "title": "Rezan Archaeology Museum",
+    "type": "Museum",
+    "picture": "images/rezan-archaeology.png",
     "price": "$ or free on weekends",
-    "openHours": "Open 09.00 - 17.00 hours",
-    "category": "Quiet"
+    "openHours": "Open 09:00 - 17:00",
+    "category": "Very Quiet"
   }
 ]
+
 
 

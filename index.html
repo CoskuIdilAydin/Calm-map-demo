@@ -5,56 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calm Places Map</title>
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
     body { margin: 0; }
     #map { width: 100vw; height: 100vh; }
+
+    /* Search & Filter Container */
+    .controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1000;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .controls input {
+      width: 150px;
+      padding: 6px;
+      margin-bottom: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .controls select {
+      width: 165px;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 
 <body>
 
+  <!-- SEARCH + FILTER UI -->
+  <div class="controls">
+    <input id="search" type="text" placeholder="Search place..." />
+    <select id="category">
+      <option value="all">All categories</option>
+      <option value="Park">Park</option>
+      <option value="Cafe">Cafe</option>
+      <option value="Quiet">Quiet</option>
+    </select>
+  </div>
+
   <div id="map"></div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // ------------------------------------------------------------
-    // DEFAULT STARTING POINT
-    // ------------------------------------------------------------
     const defaultLocation = [41.024893, 28.958593];
-
-    // Create map
     const map = L.map("map").setView(defaultLocation, 17);
 
-    // ------------------------------------------------------------
-    // BASEMAP
-    // ------------------------------------------------------------
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
-    // ------------------------------------------------------------
-    // TRY TO GET USER LOCATION
-    // ------------------------------------------------------------
     map.locate({ setView: false, maxZoom: 17 });
 
-    // If user ALLOWS location
-    map.on("locationfound", (e) => {
-      const userLocation = e.latlng;
-
-      // Move map to user location
-      map.setView(userLocation, 17);
-
-      // Blue dot at user location
-      L.circleMarker(userLocation, {
+    map.on("locationfound", e => {
+      map.setView(e.latlng, 17);
+      L.circleMarker(e.latlng, {
         radius: 10,
         color: "#136AEC",
         fillColor: "#2A93EE",
@@ -62,30 +78,50 @@
       }).addTo(map).bindPopup("You are here");
     });
 
-    // If user DENIES location
     map.on("locationerror", () => {
-      // Blue dot at default location
       L.circleMarker(defaultLocation, {
         radius: 10,
         color: "#136AEC",
         fillColor: "#2A93EE",
         fillOpacity: 1
-      }).addTo(map).bindPopup("Default start point");
+      }).addTo(map).bindPopup("Default location");
     });
-//
-    // ------------------------------------------------------------
-    // LOAD POINTS FROM points.json
-    // ------------------------------------------------------------
+
+    // Store markers
+    let markers = [];
+
+    // Load data
     fetch("points.json")
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(place => {
-          L.marker([place.lat, place.lng])
-            .addTo(map)
-            .bindPopup(`<b>${place.name}</b>`);
+      .then(resp => resp.json())
+      .then(places => {
+        markers = places.map(place => {
+          const marker = L.marker([place.lat, place.lng]);
+          marker.category = place.category;
+          marker.name = place.name;
+          marker.addTo(map).bindPopup(`<b>${place.name}</b>`);
+          return marker;
         });
-      })
-      .catch(err => console.error("points.json not found or invalid", err));
+      });
+
+    // ------------- SEARCH FUNCTION -------------
+    document.getElementById("search").addEventListener("input", filterMarkers);
+    document.getElementById("category").addEventListener("change", filterMarkers);
+
+    function filterMarkers() {
+      const searchText = document.getElementById("search").value.toLowerCase();
+      const selectedCat = document.getElementById("category").value;
+
+      markers.forEach(marker => {
+        const matchesName = marker.name.toLowerCase().includes(searchText);
+        const matchesCat = selectedCat === "all" || marker.category === selectedCat;
+
+        if (matchesName && matchesCat) {
+          marker.addTo(map);
+        } else {
+          map.removeLayer(marker);
+        }
+      });
+    }
   </script>
 
 </body>

@@ -1,20 +1,20 @@
 [
   {
-    "name": "Soğukçeşme Park",
-    "lat": 41.0241,
-    "lng": 28.9589,
+    "lat": 41.025,
+    "lng": 28.958,
+    "name": "Quiet Park",
     "category": "Park"
   },
   {
-    "name": "Kronotrop Cafe",
-    "lat": 41.0250,
-    "lng": 28.9593,
+    "lat": 41.023,
+    "lng": 28.959,
+    "name": "Calm Cafe",
     "category": "Cafe"
   },
   {
-    "name": "Secret Quiet Bench",
-    "lat": 41.0235,
-    "lng": 28.9582,
+    "lat": 41.026,
+    "lng": 28.957,
+    "name": "Silent Street Corner",
     "category": "Quiet"
   }
 ]

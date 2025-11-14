@@ -20,12 +20,14 @@
 
     <input id="search" type="text" placeholder="Search calm places..." />
 
-    <select id="category">
-      <option value="all">All categories</option>
+    <!-- 🔥 CHANGE 1 — New TYPE filter -->
+    <select id="typeFilter">
+      <option value="all">All Types</option>
       <option value="Park">Park</option>
       <option value="Cafe">Cafe</option>
-      <option value="Quiet">Quiet</option>
+      <option value="Quiet Space">Quiet Space</option>
     </select>
+    <!-- 🔥 CHANGE END -->
 
     <div id="places-list"></div>
   </div>
@@ -39,25 +41,18 @@
   <script>
     const defaultLocation = [41.024893, 28.958593];
     const map = L.map("map", { zoomControl: true }).setView(defaultLocation, 17);
-    const key = 'AxTQauKhoRFLB9bL4azf	';
-    // Base map
-    //Keeping Cosku's osm basemap in case we need it.
-    //L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      //maxZoom: 19,
-      //attribution: "&copy; OpenStreetMap contributors"
-    // Base map - MapTiler
-L.tileLayer(
-  `https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`,
-  {
-    tileSize: 512,
-    zoomOffset: -1,
-    minZoom: 1,
-    attribution:
-      '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
-      '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-    crossOrigin: true
-  }
-).addTo(map);
+
+    L.tileLayer(
+      "https://api.maptiler.com/maps/dataviz/{z}/{x}/{y}.png?key=FTUnG51TBb8dHj8BnvBS",
+      {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+        attribution:
+          '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> ' +
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+      }
+    ).addTo(map);
 
     // Locate user
     map.locate({ setView: false, maxZoom: 17 });
@@ -95,34 +90,56 @@ L.tileLayer(
 
         markers = data.map(place => {
           const marker = L.marker([place.lat, place.lng]);
+
+          /* 🔥 CHANGE 2 — Replace old fields */
           marker.title = place.title;
-          marker.category = place.category;
-          marker.addTo(map).bindPopup(`<b>${place.title}</b>`);
+          marker.type = place.type;
+          marker.picture = place.picture;
+          marker.price = place.price;
+          marker.openHours = place.openHours;
+          /* 🔥 CHANGE END */
+
+          /* 🔥 CHANGE 3 — New Popup */
+          marker.addTo(map).bindPopup(`
+            <div style="text-align:center">
+              <img src="${place.picture}" width="120" style="border-radius:8px;margin-bottom:6px">
+              <h3>${place.title}</h3>
+              <p><b>Type:</b> ${place.type}</p>
+              <p><b>Price:</b> ${place.price}</p>
+              <p><b>Open:</b> ${place.openHours}</p>
+            </div>
+          `);
+          /* 🔥 CHANGE END */
+
           return marker;
         });
       });
 
     // -------- SEARCH + FILTER --------
     document.getElementById("search").addEventListener("input", filterMarkers);
-    document.getElementById("category").addEventListener("change", filterMarkers);
+    document.getElementById("typeFilter").addEventListener("change", filterMarkers);
 
     function filterMarkers() {
       const text = document.getElementById("search").value.toLowerCase();
-      const cat = document.getElementById("category").value;
+      const typeSel = document.getElementById("typeFilter").value;
 
       markers.forEach(marker => map.removeLayer(marker));
 
+      /* 🔥 CHANGE 4 — Search by title + type */
       let filtered = markers.filter(m =>
-        (m.name.toLowerCase().includes(text)) &&
-        (cat === "all" || m.category === cat)
+        (m.title.toLowerCase().includes(text) ||
+         m.type.toLowerCase().includes(text)) &&
+        (typeSel === "all" || m.type === typeSel)
       );
+      /* 🔥 CHANGE END */
 
       filtered.forEach(m => m.addTo(map));
 
       renderPlacesList(
         placesData.filter(p =>
-          p.name.toLowerCase().includes(text) &&
-          (cat === "all" || p.category === cat)
+          (p.title.toLowerCase().includes(text) ||
+           p.type.toLowerCase().includes(text)) &&
+          (typeSel === "all" || p.type === typeSel)
         )
       );
     }
@@ -135,7 +152,18 @@ L.tileLayer(
       places.forEach(place => {
         const item = document.createElement("div");
         item.className = "place-item";
-        item.innerHTML = `<b>${place.name}</b><br><span>${place.category}</span>`;
+
+        /* 🔥 CHANGE 5 — Sidebar with image + type + price */
+        item.innerHTML = `
+          <img src="${place.picture}" class="thumb">
+          <div class="info">
+            <b>${place.title}</b><br>
+            <span>${place.type}</span><br>
+            <small>${place.price} • ${place.openHours}</small>
+          </div>
+        `;
+        /* 🔥 CHANGE END */
+
         item.onclick = () => map.setView([place.lat, place.lng], 18);
         list.appendChild(item);
       });

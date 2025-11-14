@@ -39,30 +39,25 @@
   <script>
     const defaultLocation = [41.024893, 28.958593];
     const map = L.map("map", { zoomControl: true }).setView(defaultLocation, 17);
-
-    /*  
-    =====================================================
-    🔵 CHANGE START — MapTiler Dataviz Basemap (Your API key added)
-    =====================================================
-    */
-
-    L.tileLayer(
-      "https://api.maptiler.com/maps/dataviz/{z}/{x}/{y}.png?key=FTUnG51TBb8dHj8BnvBS",
-      {
-        tileSize: 512,
-        zoomOffset: -1,
-        minZoom: 1,
-        attribution:
-          '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> ' +
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
-      }
-    ).addTo(map);
-
-    /*
-    =====================================================
-    🔵 CHANGE END
-    =====================================================
-    */
+    const key = 'AxTQauKhoRFLB9bL4azf	';
+    // Base map
+    //Keeping Cosku's osm basemap in case we need it.
+    //L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      //maxZoom: 19,
+      //attribution: "&copy; OpenStreetMap contributors"
+    // Base map - MapTiler
+L.tileLayer(
+  `https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`,
+  {
+    tileSize: 512,
+    zoomOffset: -1,
+    minZoom: 1,
+    attribution:
+      '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
+      '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+    crossOrigin: true
+  }
+).addTo(map);
 
     // Locate user
     map.locate({ setView: false, maxZoom: 17 });
@@ -100,9 +95,9 @@
 
         markers = data.map(place => {
           const marker = L.marker([place.lat, place.lng]);
-          marker.name = place.name;
+          marker.title = place.title;
           marker.category = place.category;
-          marker.addTo(map).bindPopup(`<b>${place.name}</b>`);
+          marker.addTo(map).bindPopup(`<b>${place.title}</b>`);
           return marker;
         });
       });

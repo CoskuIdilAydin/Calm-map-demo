@@ -82,7 +82,7 @@
     let placesData = [];
 
     // -------- LOAD POINTS --------
-    fetch("points.json")
+    fetch("points.json?v=" + Date.now())
       .then(resp => resp.json())
       .then(data => {
         placesData = data;

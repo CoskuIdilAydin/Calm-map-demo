@@ -8,21 +8,26 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
-  <!-- Your custom styles -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
 
-  <!-- SEARCH + FILTER UI -->
-  <div class="controls">
+  <!-- RIGHT SIDEBAR -->
+  <div id="sidebar">
+    <h2>Calm Places</h2>
+
     <input id="search" type="text" placeholder="Search calm places..." />
+
     <select id="category">
       <option value="all">All categories</option>
       <option value="Park">Park</option>
       <option value="Cafe">Cafe</option>
       <option value="Quiet">Quiet</option>
     </select>
+
+    <div id="places-list"></div>
   </div>
 
   <!-- MAP -->
@@ -32,57 +37,59 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    const defaultLocation = [41.024893, 28.958593]; // fallback location
+    const defaultLocation = [41.024893, 28.958593];
+    const map = L.map("map", { zoomControl: true }).setView(defaultLocation, 17);
 
-    // Disable zoom buttons
-    const map = L.map("map", { zoomControl: false }).setView(defaultLocation, 17);
-
-    // Add map tiles
+    // Base map
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
-    // Try to locate user
+    // Locate user
     map.locate({ setView: false, maxZoom: 17 });
 
     map.on("locationfound", e => {
       map.setView(e.latlng, 17);
       L.circleMarker(e.latlng, {
-        radius: 10,
+        radius: 8,
         color: "#136AEC",
         fillColor: "#2A93EE",
-        fillOpacity: 1
-      }).addTo(map).bindPopup("You are here");
+        fillOpacity: 1,
+      })
+      .addTo(map)
+      .bindPopup("You are here");
     });
 
-    // If user denies location -> default
     map.on("locationerror", () => {
       L.circleMarker(defaultLocation, {
-        radius: 10,
+        radius: 8,
         color: "#136AEC",
         fillColor: "#2A93EE",
-        fillOpacity: 1
-      }).addTo(map).bindPopup("Default location");
+        fillOpacity: 1,
+      }).addTo(map);
     });
 
-    // Store all markers
     let markers = [];
+    let placesData = [];
 
-    // Load calm places
+    // -------- LOAD POINTS --------
     fetch("points.json")
       .then(resp => resp.json())
-      .then(places => {
-        markers = places.map(place => {
+      .then(data => {
+        placesData = data;
+        renderPlacesList(data);
+
+        markers = data.map(place => {
           const marker = L.marker([place.lat, place.lng]);
-          marker.category = place.category;
           marker.name = place.name;
+          marker.category = place.category;
           marker.addTo(map).bindPopup(`<b>${place.name}</b>`);
           return marker;
         });
       });
 
-    // SEARCH + FILTER
+    // -------- SEARCH + FILTER --------
     document.getElementById("search").addEventListener("input", filterMarkers);
     document.getElementById("category").addEventListener("change", filterMarkers);
 
@@ -90,18 +97,36 @@
       const text = document.getElementById("search").value.toLowerCase();
       const cat = document.getElementById("category").value;
 
-      markers.forEach(marker => {
-        const matchesName = marker.name.toLowerCase().includes(text);
-        const matchesCat = cat === "all" || marker.category === cat;
+      markers.forEach(marker => map.removeLayer(marker));
 
-        if (matchesName && matchesCat) {
-          marker.addTo(map);
-        } else {
-          map.removeLayer(marker);
-        }
+      let filtered = markers.filter(m =>
+        (m.name.toLowerCase().includes(text)) &&
+        (cat === "all" || m.category === cat)
+      );
+
+      filtered.forEach(m => m.addTo(map));
+
+      renderPlacesList(
+        placesData.filter(p =>
+          p.name.toLowerCase().includes(text) &&
+          (cat === "all" || p.category === cat)
+        )
+      );
+    }
+
+    // -------- SIDEBAR LIST --------
+    function renderPlacesList(places) {
+      const list = document.getElementById("places-list");
+      list.innerHTML = "";
+
+      places.forEach(place => {
+        const item = document.createElement("div");
+        item.className = "place-item";
+        item.innerHTML = `<b>${place.name}</b><br><span>${place.category}</span>`;
+        item.onclick = () => map.setView([place.lat, place.lng], 18);
+        list.appendChild(item);
       });
     }
   </script>
-
 </body>
 </html>

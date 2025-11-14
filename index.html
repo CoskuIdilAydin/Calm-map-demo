@@ -40,11 +40,29 @@
     const defaultLocation = [41.024893, 28.958593];
     const map = L.map("map", { zoomControl: true }).setView(defaultLocation, 17);
 
-    // Base map
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(map);
+    /*  
+    =====================================================
+    🔵 CHANGE START — MapTiler Dataviz Basemap
+    =====================================================
+    */
+
+    L.tileLayer(
+      "https://api.maptiler.com/maps/dataviz/{z}/{x}/{y}.png?key=YOUR_API_KEY",
+      {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+        attribution:
+          '&copy; <a href="https://www.maptiler.com/copyright/">MapTiler</a> ' +
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+      }
+    ).addTo(map);
+
+    /*
+    =====================================================
+    🔵 CHANGE END
+    =====================================================
+    */
 
     // Locate user
     map.locate({ setView: false, maxZoom: 17 });

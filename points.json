@@ -1,12 +1,20 @@
 [
   {
-    "lat": 41.0245,
-    "lng": 28.9579,
-    "name": "Calm Park"
+    "name": "Soğukçeşme Park",
+    "lat": 41.0241,
+    "lng": 28.9589,
+    "category": "Park"
   },
   {
+    "name": "Kronotrop Cafe",
     "lat": 41.0250,
-    "lng": 28.9591,
-    "name": "Quiet Corner Bench"
+    "lng": 28.9593,
+    "category": "Cafe"
+  },
+  {
+    "name": "Secret Quiet Bench",
+    "lat": 41.0235,
+    "lng": 28.9582,
+    "category": "Quiet"
   }
 ]

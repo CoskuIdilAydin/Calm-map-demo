@@ -1,20 +1,20 @@
 [
   {
-    "lat": 41.025,
-    "lng": 28.958,
-    "name": "Quiet Park",
+    "lat": 41.0252,
+    "lng": 28.9590,
+    "name": "Silent Park",
     "category": "Park"
   },
   {
-    "lat": 41.023,
-    "lng": 28.959,
-    "name": "Calm Cafe",
+    "lat": 41.0240,
+    "lng": 28.9575,
+    "name": "Calm Coffee",
     "category": "Cafe"
   },
   {
-    "lat": 41.026,
-    "lng": 28.957,
-    "name": "Silent Street Corner",
+    "lat": 41.0260,
+    "lng": 28.9580,
+    "name": "Quiet Corner Spot",
     "category": "Quiet"
   }
 ]

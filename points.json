@@ -1,20 +1,34 @@
 [
   {
-    "lat": 41.0252,
-    "lng": 28.9590,
-    "name": "Silent Park",
+    "lat": 41.02560,
+    "lng": 28.95781,
+    "title": "Nalıncı Kasım Small Park",
+    "type": "Park",
+    "picture": "images/NalıncıKasımSk-istanbul.png",
+    "price": "Free",
+    "openHours": "Open 24 hours",
     "category": "Park"
   },
   {
     "lat": 41.0240,
     "lng": 28.9575,
-    "name": "Calm Coffee",
+    "title": "Calm Coffee",
+    "type": "Cafe",
+    "picture": "images/calm-coffee.jpg",
+    "price": "$$",
+    "openHours": "9:00 - 23:00",
     "category": "Cafe"
   },
   {
     "lat": 41.0260,
     "lng": 28.9580,
-    "name": "Quiet Corner Spot",
+    "title": "Quiet Corner",
+    "type": "Quiet Space",
+    "picture": "images/quiet-corner.jpg",
+    "price": "Free",
+    "openHours": "Open 24 hours",
     "category": "Quiet"
   }
 ]
+
+

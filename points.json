@@ -1,33 +1,94 @@
+
 [
   {
-    "lat": 41.02560,
-    "lng": 28.95781,
-    "title": "Nalıncı Kasım Small Park",
-    "type": "Park",
-    "picture": "images/nalinci-kasim-park.png",
-    "price": "Free",
-    "openHours": "Open 24 hours",
-    "category": "Very Quiet"
+    "name": "Nalıncı Kasım Small Park",
+    "lat": 41.02557519258777,
+    "lng": 28.957799095839032,
+    "address": "Yavuz Sultan Selim, Nalıncı Kasım Sk. No:35, 34083 Fatih/İstanbul",
+    "vibe-type": "Nature",
+    "cost": "Easy on the wallet",
+    "accessibility": "Easy",
+    "image": "PARK IMAGE GOES HERE"
   },
   {
-    "lat": 41.025310616727765,
-    "lng": 28.957661386297183,
-    "title": "Calm Coffee",
-    "type": "Cafe",
-    "picture": "images/calm-coffee.png",
-    "price": "$$",
-    "openHours": "around 11:00 - 20:00",
-    "category": "Quiet"
+    "name": "Posa Coffee",
+    "lat": 41.0252003119178, 
+    "lng": 28.95764644870647,
+    "address": "Yavuz Sultan Selim, Aralık Sk. no:1, 34083 Fatih/İstanbul",
+    "vibe-type": "Eats & Drinks",
+    "cost": "Something reasonable",
+    "accessibility": "Moderate",
+    "image": "CAFE IMAGE DOES HERE"
   },
   {
-    "lat": 41.02571470499312,
-    "lng": 28.95900183273744,
-    "title": "Rezan Archaeology Museum",
-    "type": "Museum",
-    "picture": "images/rezan-archaeology.png",
-    "price": "$ or free on weekends",
-    "openHours": "Open 09:00 - 17:00",
-    "category": "Very Quiet"
+    "name": "Rezan Has Museum",
+    "lat": 41.025729474996915, 
+    "lng": 28.959006503701207,
+    "vibe-type": "Quiet",
+    "address": "Cibali, Kadir Has Cd., 34083 Fatih/İstanbul",
+    "cost": "Easy on the wallet",
+    "accessibility": "Easy",
+    "image": "MUSEUM IMAGE GOES HERE"
+  },
+  {
+    "name": "Spirit of Yoga",
+    "lat": 33.39397402756576,
+    "lng": -111.91509605586525,
+    "address": "1420 E Southern Ave, Tempe, AZ 85282",
+    "vibe-type": "Exercise",
+    "cost": "Something reasonable",
+    "accessibility": "Easy",
+    "image": "https://raw.githubusercontent.com/saguaroland1939/Calm-Map/main/docs/SpiritOfYoga.jpg"
+  },
+  {
+    "name": "South Mountain Park and Preserve",
+    "lat": 33.33347409246764,
+    "lng": -112.07528798575756,
+    "address": "4500 E Pima Canyon Rd, Phoenix, AZ 85044",
+    "vibe-type": "Nature",
+    "cost": "Easy on the wallet",
+    "accessibility": "Moderate",
+    "image": "https://raw.githubusercontent.com/saguaroland1939/Calm-Map/main/docs/SouthMountain.jpg"
+  },
+  {
+    "name": "Arizona State University Community Choir",
+    "lat": 33.41625101610767,
+    "lng": -111.9380582285955,
+    "address": "1200 S Forest Ave, Tempe, AZ 85281",
+    "vibe-type": "Arts",
+    "cost": "Easy on the wallet",
+    "accessibility": "Easy",
+    "image": "https://raw.githubusercontent.com/saguaroland1939/Calm-Map/main/docs/ASUCommunityChoir.jpg"
+  },
+  {
+    "name": "Sanctuary",
+    "lat": 33.5226537890013,
+    "lng": -111.95951959015127,
+    "address": "5700 E McDonald Dr, Paradise Valley, AZ 85253",
+    "vibe-type": "Wellness",
+    "cost": "Big treat to self",
+    "accessibility": "Easy",
+    "image": "https://github.com/saguaroland1939/Calm-Map/blob/main/docs/Sanctuary.jpg?raw=true"
+  },
+  {
+    "name": "Tempe Town Lake North Shore",
+    "lat": 33.43465212937615,
+    "lng": -111.93260682439418,
+    "address": "Near 550 E Tempe Town Lake, Tempe, AZ 85288",
+    "vibe-type": "Nature",
+    "cost": "Easy on the wallet",
+    "accessibility": "Easy",
+    "image": "https://i.pinimg.com/736x/f8/2c/c3/f82cc3f081030e4edd3d49e4ea97c0c2.jpg"
+  },
+  {
+    "name": "Hole in the Rock",
+    "lat": 33.45648857997514,
+    "lng": -111.94526309095686,
+    "address": "625 N Galvin Pkwy, Phoenix, AZ 85008",
+    "vibe-type": "Nature",
+    "cost": "Easy on the wallet",
+    "accessibility": "Moderate",
+    "image": "https://www.tempetourism.com/wp-content/uploads/B8A17383-large-2.jpg"
   }
 ]
 
